@@ -1,0 +1,11 @@
+export  WRF_HOME=/home/s4300795/wrf
+export  WRF_DEPENDENCIES=/home/s4300795/deps
+module purge
+module load modenv/scs5
+module load OpenMPI/4.0.4-GCC-9.3.0
+module load cURL/7.69.1-GCCcore-9.3.0
+module load freeglut/3.2.1-GCCcore-9.3.0
+module load CMake
+module load GCC/9.3.0
+export PATH=$WRF_DEPENDENCIES:$WRF_DEPENDENCIES/bin:$PATH
+export LD_LIBRARY_PATH=$WRF_DEPENDENCIES:$WRF_DEPENDENCIES/lib:$WRF_DEPENDENCIES/lib64:$LD_LIBRARY_PATH
