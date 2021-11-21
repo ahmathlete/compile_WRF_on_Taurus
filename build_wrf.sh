@@ -62,12 +62,6 @@ rm -rf netcdf-fortran-4.5.3 netcdf-fortran-4.5.3.tar.gz
 
 # compile jasper
 cd $WRF_HOME && \
-# wget https://github.com/jasper-software/jasper/releases/download/version-2.0.33/jasper-2.0.33.tar.gz && \
-# tar xvf jasper-2.0.33.tar.gz && \
-# cd jasper-2.0.33 && \
-# cmake -DCMAKE_INSTALL_PREFIX=$WRF_DEPENDENCIES -B build . && \
-# cmake --build build && \
-# cmake --build build --target install && \
 wget https://www.ece.uvic.ca/~frodo/jasper/software/jasper-1.900.29.tar.gz && \
 tar xvf jasper-1.900.29.tar.gz && \
 cd jasper-1.900.29 && \
@@ -95,5 +89,6 @@ wget https://github.com/wrf-model/WPS/archive/refs/tags/v4.3.1.tar.gz && \
 tar xvf v4.3.1.tar.gz && \
 cd WPS-4.3.1/ && \
 ./configure && \
-./compile 2>&1 | tee compile.log
-ls -rlt
+./compile 2>&1 | tee compile.log &&\
+cd .. && \
+rm -rf v4.3.1.tar.gz
