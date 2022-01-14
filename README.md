@@ -1,3 +1,6 @@
+[![repo status - closed](https://img.shields.io/badge/repo_status-closed-ff0000)](https://)
+[![field of application - climatology, modelling](https://img.shields.io/badge/field_of_application-climatology%2C_modelling-00aaff)](https://)
+
 Shell script for compiling the Weather Research and Forecasting Model on HPC Taurus.
 
 ## chosen configuration
