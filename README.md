@@ -3,10 +3,10 @@
 
 Shell script for compiling the Weather Research and Forecasting Model on HPC Taurus.
 
-## chosen configuration
-34 (dmpar) GNU (gfortran/gcc)\
+## chosen configuration for WRF
+WRF: 34 (dmpar) GNU (gfortran/gcc)\
 nesting: 1=basic\
-3 Linux x86_64, gfortran (dmpar)
+WPS: Linux x86_64, gfortran (serial)
 
 ## poem
 It took several days\
