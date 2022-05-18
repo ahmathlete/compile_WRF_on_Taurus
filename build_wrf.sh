@@ -3,8 +3,14 @@
 # exit on first error
 set -e
 
+# load modules
 source wrf_modules
 
+# set environment variable
+export WRF_HOME=/home/s4300795/wrf/wrf_model/
+export WRF_DEPENDENCIES=/home/s4300795/wrf/wrf_deps/
+
+# create folders for the model and the dependencies
 mkdir $WRF_HOME
 mkdir $WRF_DEPENDENCIES
 
