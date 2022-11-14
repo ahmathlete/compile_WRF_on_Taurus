@@ -8,6 +8,7 @@
   - [Creating Modulefile](#creating-modulefile)
     - [WRF as module](#wrf-as-module)
     - [WPS as module](#wps-as-module)
+  - [Others](#others)
 
 First, thanks to @ KlemensBarfus & @lenamueller for their help and the rich discussion :grinning:.
 
@@ -174,3 +175,11 @@ setenv("NETCDF", "/projects/p_your_project/WRF/netcdf_mine")
 setenv("NETCDFF", "/sw/installed/netCDF-Fortran/4.4.4-intel-2018a")
 ```
 ### WPS as module 
+
+## Others
+
+If you would like to remove some unnecessary paths in `PATH` variable after installation, you can use:
+
+```bash
+PATH=$(REMOVE_PART="Path/to/be/removed" sh -c 'echo ":$PATH:" | sed "s@:$REMOVE_PART:@:@g;s@^:\(.*\):\$@\1@"')
+```
