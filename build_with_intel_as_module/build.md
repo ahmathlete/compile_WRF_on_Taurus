@@ -1,16 +1,18 @@
-# Installation as project module of WRF model using Intel compilers
+# Installation of WRF model using Intel compilers as a module 
 
-- [Installation as project module of WRF model using Intel compilers](#installation-as-project-module-of-wrf-model-using-intel-compilers)
+- [Installation of WRF model using Intel compilers as a module](#installation-of-wrf-model-using-intel-compilers-as-a-module)
   - [Dependencies](#dependencies)
   - [WRF & WPS Installation](#wrf--wps-installation)
-    - [WRF](#wrf)
-    - [WPS](#wps)
+    - [WRF Installation](#wrf-installation)
+    - [WPS Installation](#wps-installation)
   - [Creating Modulefile](#creating-modulefile)
     - [WRF as module](#wrf-as-module)
     - [WPS as module](#wps-as-module)
   - [Others](#others)
 
-First, thanks to @ KlemensBarfus & @lenamueller for their help and the rich discussion :grinning:.
+First, thanks to @ KlemensBarfus & @lenamueller for their help and the rich discussion :smile:.
+
+The poem by @lenamueller in the README.md file has contributed to the WRF model installation :smile:.
 
 
 In this document, the steps to install the Weather Research & Forecasting Model (WRF) model on The HPC cluster of TU Dresden (Taurus) is listed. The document is organized as follows:
@@ -36,8 +38,6 @@ To successfully, install the WRF model, the right modules and environment variab
 ```bash
 srun --pty --nodes=1 --partition=interactive --cpus-per-task=8 --time=6:00:00 --mem-per-cpu=2000 bash -l
 ```
-
-Now, you can change to your project directory. i.e.`/projects/p_your_project`
 
 After starting the interactive job, change to your project directory and make directory for WRF model. In this folder, many versions of WRF module and WPS can be installed.
 
@@ -103,7 +103,7 @@ It is okay if the commands above produce permission denied error. You can again 
 
 ## WRF & WPS Installation
 
-### WRF
+### WRF Installation
 
 After setting up the environment variables and getting the right libraries. You can get the WRF model & and start installing:
 
@@ -127,15 +127,29 @@ Now you can compile the WRF model using:
 ./compile -j 4 em_real 2>&1 | tee compile.log
 ```
 
-`-j 4` means compile the model parallel. The number refers to the number of the parallel processes. This step can take up to one hour (with the default `-j 2`).
+`-j 4` means compile the model in parallel. The number refers to the number of the parallel processes. This step can take up to one hour (with the default `-j 2`).
 
-### WPS
+If everything went right, this should be the final output from compilation process:
 
-to be continued
+```bash
+--->                  Executables successfully built                  <---
+ 
+-rwxr-xr-x 1 user 1111111 82526016  4. Nov 10:11 main/ndown.exe
+-rwxr-xr-x 1 user 1111111 82319936  4. Nov 10:11 main/real.exe
+-rwxr-xr-x 1 user 1111111 80584544  4. Nov 10:11 main/tc.exe
+-rwxr-xr-x 1 user 1111111 94257672  4. Nov 10:08 main/wrf.exe
+ 
+==========================================================================
+```
+### WPS Installation
+
+**to be continued**
 
 ## Creating Modulefile
 
-### WRF as module 
+### WRF as module
+
+Create a `lua` file (i.e. `4.3.1.lua`) with the version of WRF model and placed it in `/projects/p_your_project/WRF/WRF-4.3.1`. For more information about lua or lmod files, please check [writing Modulefiles](https://lmod.readthedocs.io/en/latest/015_writing_modules.html)
 
 ```lua
 help([[
@@ -147,13 +161,14 @@ WRF Model is a state of the art mesoscale numerical weather prediction system de
 More Information
 ================
 For detailed instructions, go to:
-   https://www2.mmm.ucar.edu/wrf
+   https://www2.mmm.ucar.edu/wrf/users/docs/user_guide_v4/v4.3/contents.html
 
 ]])
 
 whatis("Version: 4.3.1")
 whatis([==[Description: The Weather Research and Forecasting (WRF) Model is a next-generation mesoscale numerical weather prediction system designed to serve both operational forecasting and atmospheric research needs.]==])
 whatis([==[Homepage: http://www.wrf-model.org]==])
+whatis("Keywords: Climate Modelling, Numerical weather Prediction, Mesoscale Modelling")
 
 conflict("WRF")
 
@@ -165,17 +180,54 @@ depends_on("PnetCDF/1.9.0-intel-2018a")
 depends_on("netCDF-Fortran/4.4.4-intel-2018a")
 depends_on("ecCodes/2.8.2-intel-2018a")
 
-
-
 local root = "/projects/p_your_project/WRF/WRF-4.3.1"
 prepend_path( "PATH",            pathJoin(root, "main"))
 prepend_path( "LD_LIBRARY_PATH", pathJoin(root, "main"))
 
-setenv("NETCDF", "/projects/p_your_project/WRF/netcdf_mine")
-setenv("NETCDFF", "/sw/installed/netCDF-Fortran/4.4.4-intel-2018a")
+setenv("PROJECT_DIR", "/projects/p_your_project")
+setenv("WRF_DIR", "$PROJECT_DIR/WRF/WRF-4.3.1")
+
+setenv("WRFIO_NCD_LARGE_FILE_SUPPORT" , 1)
+setenv("NETCDF4"                      , 1)
+setenv("OMP_STACKSIZE"                , "2G")
+setenv("HDF5"                         , "$EBROOTHDF5")
+setenv("PHDF5"                        , "$EBROOTHDF5")
+setenv("PNETCDF"                      , "$EBROOTPNETCDF")
+setenv("NETCDF"                       , "$PROJECT_DIR/WRF/netcdf_mine")
+setenv("NETCDFF"                      , "$EBROOTNETCDFMINFORTRAN")
+setenv("JASPERLIB"                    , "$EBROOTJASPER/lib64")  
+setenv("JASPERINC"                    , "$EBROOTJASPER/include") 
+
+```
+
+After placing the `4.3.1.lua` in WRF directory, now you need to you need to expand the module search path. This is done by invoking the command:
+
+```bash
+module use /projects/p_your_project/WRF/WRF-4.3.1 
+# or 
+module use $WRF_DIR # if you still have it as environment variable.
+
+```
+
+The command above can fire an error due to the existence of this file `hydro/.version`. It can be solved by:
+
+```bash
+#show the file 
+cat $WRF_DIR/hydro/.version
+# rename it 
+mv $WRF_DIR/hydro/.version $WRF_DIR/hydro/backup-version
+#then expand the path for the module 
+module use $WRF_DIR # if you still have it as environment variable.
+```
+
+If you are the admin of the project, you will need to make the file accesabile for your project member, therfore use: 
+
+```bash
+chmod -R 777 /projects/p_your_project/WRF/WRF-4.3.1
 ```
 ### WPS as module 
 
+**to be continued**
 ## Others
 
 If you would like to remove some unnecessary paths in `PATH` variable after installation, you can use:

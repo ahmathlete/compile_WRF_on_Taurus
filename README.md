@@ -26,3 +26,7 @@ the WPS waits to be fed\
 let's start the first thread...
 
 Thanks to HPC-Support & Fabian
+
+## **Edit (Nov 2022)**
+
+The repository include instruction to install WRF Model with Intel compiler. As well as instruction to install the model as HPC module.
