@@ -1,8 +1,8 @@
-# Installation of WRF model using Intel compilers as a module 
+# Installation of WRF model using Intel compilers as a module
 
 - [Installation of WRF model using Intel compilers as a module](#installation-of-wrf-model-using-intel-compilers-as-a-module)
   - [Dependencies](#dependencies)
-  - [WRF & WPS Installation](#wrf--wps-installation)
+  - [WRF \& WPS Installation](#wrf--wps-installation)
     - [WRF Installation](#wrf-installation)
     - [WPS Installation](#wps-installation)
   - [Creating Modulefile](#creating-modulefile)
@@ -141,15 +141,52 @@ If everything went right, this should be the final output from compilation proce
  
 ==========================================================================
 ```
+
 ### WPS Installation
 
-**to be continued**
+First, you need to get WPS from GitHub:
+
+```bash
+cd .. 
+wget https://github.com/wrf-model/WPS/archive/v4.2.tar.gz
+tar xvf v4.2.tar.gz
+```
+
+You might want to implement the modification introduced by @KlemensBarfus on his Github repository.
+#https://github.com/KlemensBarfus/WRF_opt_output_from_ungrib_path
+
+```bash
+
+```
+
+This is a bash script to get the routines & copy the files to their respective location in WPS directory:
+
+```bash
+# get routines 
+git clone https://github.com/KlemensBarfus/WRF_opt_output_from_ungrib_path.git
+
+# copy 
+cp WRF_opt_output_from_ungrib_path/geogrid_gridinfo_module.F  WPS-4.2/geogrid/src/gridinfo_module.F
+cp WRF_opt_output_from_ungrib_path/process_domain_module.F    WPS-4.2/metgrid/src/process_domain_module.F
+
+cp WRF_opt_output_from_ungrib_path/metgrid:gridinfo_module.F  WPS-4.2/metgrid/src/gridinfo_module.F 
+cp WRF_opt_output_from_ungrib_path/datint.F                   WPS-4.2/ungrib/src/datint.F
+cp WRF_opt_output_from_ungrib_path/file_delete.F              WPS-4.2/ungrib/src/file_delete.F
+cp WRF_opt_output_from_ungrib_path/read_namelist.F            WPS-4.2/ungrib/src/read_namelist.F 
+cp WRF_opt_output_from_ungrib_path/rrpr.F                     WPS-4.2/ungrib/src/rrpr.F
+cp WRF_opt_output_from_ungrib_path/output.F                   WPS-4.2/ungrib/src/output.F 
+
+cp WRF_opt_output_from_ungrib_path/ungrib.F                   WPS-4.2/util/src/ungrib.F
+cp WRF_opt_output_from_ungrib_path/avg_tsfc.F                 WPS-4.2/util/src/avg_tsfc.F 
+cp WRF_opt_output_from_ungrib_path/util_gridinfo_module.F     WPS-4.2/util/src/gridinfo_module.F  # symlink
+cp WRF_opt_output_from_ungrib_path/calc_ecmwf_p.F             WPS-4.2/util/src/calc_ecmwf_p.F
+```
 
 ## Creating Modulefile
 
 ### WRF as module
 
-Create a `lua` file (i.e. `4.3.1.lua`) with the version of WRF model and placed it in `/projects/p_your_project/WRF/WRF-4.3.1`. For more information about lua or lmod files, please check [writing Modulefiles](https://lmod.readthedocs.io/en/latest/015_writing_modules.html)
+Create a `lua` file (i.e. `4.3.1-intel-2018a-dmpar.lua`) with the version of WRF model and placed it in `/projects/p_your_project/WRF/WRF-4.3.1`. For more information about lua or lmod files, please check [writing Modulefiles](https://lmod.readthedocs.io/en/latest/015_writing_modules.html)
 
 ```lua
 help([[
@@ -190,13 +227,13 @@ setenv("WRF_DIR", "$PROJECT_DIR/WRF/WRF-4.3.1")
 setenv("WRFIO_NCD_LARGE_FILE_SUPPORT" , 1)
 setenv("NETCDF4"                      , 1)
 setenv("OMP_STACKSIZE"                , "2G")
-setenv("HDF5"                         , "$EBROOTHDF5")
-setenv("PHDF5"                        , "$EBROOTHDF5")
-setenv("PNETCDF"                      , "$EBROOTPNETCDF")
+setenv("HDF5"                         , "/sw/installed/HDF5/1.10.1-intel-2018a")
+setenv("PHDF5"                        , "/sw/installed/HDF5/1.10.1-intel-2018a")
+setenv("PNETCDF"                      , "/sw/installed/PnetCDF/1.9.0-intel-2018a")
 setenv("NETCDF"                       , "$PROJECT_DIR/WRF/netcdf_mine")
-setenv("NETCDFF"                      , "$EBROOTNETCDFMINFORTRAN")
-setenv("JASPERLIB"                    , "$EBROOTJASPER/lib64")  
-setenv("JASPERINC"                    , "$EBROOTJASPER/include") 
+setenv("NETCDFF"                      , "/sw/installed/netCDF-Fortran/4.4.4-intel-2018a")
+setenv("JASPERLIB"                    , "/sw/installed/JasPer/2.0.14-GCCcore-6.4.0/lib64")  
+setenv("JASPERINC"                    , "/sw/installed/JasPer/2.0.14-GCCcore-6.4.0/include") 
 
 ```
 
@@ -220,14 +257,16 @@ mv $WRF_DIR/hydro/.version $WRF_DIR/hydro/backup-version
 module use $WRF_DIR # if you still have it as environment variable.
 ```
 
-If you are the admin of the project, you will need to make the file accesabile for your project member, therfore use: 
+If you are the admin of the project, you will need to make the file accesabile for your project member, therfore use:
 
 ```bash
 chmod -R 777 /projects/p_your_project/WRF/WRF-4.3.1
 ```
-### WPS as module 
+
+### WPS as module
 
 **to be continued**
+
 ## Others
 
 If you would like to remove some unnecessary paths in `PATH` variable after installation, you can use:
