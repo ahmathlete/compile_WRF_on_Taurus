@@ -2,7 +2,7 @@
     <html>
     <head>
         <meta charset="UTF-8">
-        <title>Installation of WRF model using Intel compilers as a module</title>
+        <title>1&period; Installation of WRF model using Intel compilers as a module</title>
         <style>
 /* From extension vscode.github */
 /*---------------------------------------------------------------------------------------------
@@ -76,24 +76,24 @@
         
     </head>
     <body class="vscode-body vscode-light">
-        <h1 id="installation-of-wrf-model-using-intel-compilers-as-a-module">Installation of WRF model using Intel compilers as a module</h1>
+        <h1 id="1-installation-of-wrf-model-using-intel-compilers-as-a-module">1. Installation of WRF model using Intel compilers as a module</h1>
 <ul>
-<li><a href="#installation-of-wrf-model-using-intel-compilers-as-a-module">Installation of WRF model using Intel compilers as a module</a>
+<li><a href="#1-installation-of-wrf-model-using-intel-compilers-as-a-module">1. Installation of WRF model using Intel compilers as a module</a>
 <ul>
-<li><a href="#dependencies">Dependencies</a></li>
-<li><a href="#wrf--wps-installation">WRF &amp; WPS Installation</a>
+<li><a href="#11-dependencies">1.1. Dependencies</a></li>
+<li><a href="#12-wrf-installation-as-a-module">1.2. WRF Installation as a module</a>
 <ul>
-<li><a href="#wrf-installation">WRF Installation</a></li>
-<li><a href="#wps-installation">WPS Installation</a></li>
+<li><a href="#121-wrf-installation">1.2.1. WRF Installation</a></li>
+<li><a href="#122-creating-module-file-for-wrf">1.2.2. Creating module file for WRF</a></li>
 </ul>
 </li>
-<li><a href="#creating-modulefile">Creating Modulefile</a>
+<li><a href="#13-wps-installation-as-a-module">1.3. WPS Installation as a module</a>
 <ul>
-<li><a href="#wrf-as-module">WRF as module</a></li>
-<li><a href="#wps-as-module">WPS as module</a></li>
+<li><a href="#131-wps-installation">1.3.1. WPS Installation</a></li>
+<li><a href="#122-creating-module-file-for-wps">1.2.2. Creating module file for WPS</a></li>
 </ul>
 </li>
-<li><a href="#others">Others</a></li>
+<li><a href="#15-others">1.5. Others</a></li>
 </ul>
 </li>
 </ul>
@@ -102,8 +102,8 @@
 <p>In this document, the steps to install the Weather Research &amp; Forecasting Model (WRF) model on The HPC cluster of TU Dresden (Taurus) is listed. The document is organized as follows:</p>
 <ol>
 <li>Dependencies including variables &amp; path.</li>
-<li>WRF &amp; WPS Installation</li>
-<li>Creating Module file for WRF &amp; WPS</li>
+<li>WRF Installation as a module</li>
+<li>WPS Installation as a module</li>
 </ol>
 <p>Installation Summary:</p>
 <table>
@@ -120,7 +120,7 @@
 </tr>
 <tr>
 <td>WPS</td>
-<td>4.3</td>
+<td>4.3.1</td>
 </tr>
 <tr>
 <td>Compiler</td>
@@ -136,7 +136,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="dependencies">Dependencies</h2>
+<h2 id="11-dependencies">1.1. Dependencies</h2>
 <p>To successfully, install the WRF model, the right modules and environment variables should be set up. However, first start an interactive job to install the model. e.g.:</p>
 <pre><code class="language-bash">srun --pty --nodes=1 --partition=interactive --cpus-per-task=8 --time=6:00:00 --mem-per-cpu=2000 bash -l
 </code></pre>
@@ -153,8 +153,8 @@ module load PnetCDF/1.9.0-intel-2018a
 module load netCDF-Fortran/4.4.4-intel-2018a
 
 <span class="hljs-built_in">export</span> PROJECT_DIR=/projects/p_your_project 
-<span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$PATH</span>:<span class="hljs-variable">$PROJECT_DIR</span>/WRF/netcdf_mine/bin
-<span class="hljs-built_in">export</span> WRF_DIR=<span class="hljs-variable">$PROJECT_DIR</span>/WRF/WRF-4.3.1
+<span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$PATH</span>:/projects/p_your_project/WRF/netcdf_mine/bin
+<span class="hljs-built_in">export</span> WRF_DIR=/projects/p_your_project/WRF/WRF-4.3.1
 
 <span class="hljs-built_in">export</span> WRFIO_NCD_LARGE_FILE_SUPPORT=1
 <span class="hljs-built_in">export</span> NETCDF4=1
@@ -165,7 +165,7 @@ module load netCDF-Fortran/4.4.4-intel-2018a
 <span class="hljs-built_in">export</span> NETCDF=<span class="hljs-variable">$PROJECT_DIR</span>/WRF/netcdf_mine
 <span class="hljs-built_in">export</span> NETCDFF=<span class="hljs-variable">$EBROOTNETCDFMINFORTRAN</span>
 <span class="hljs-built_in">export</span> JASPERLIB=<span class="hljs-variable">$EBROOTJASPER</span>/lib64  
-<span class="hljs-built_in">export</span> JASPERINC=<span class="hljs-variable">$EBROOTJASPER</span>/include  
+<span class="hljs-built_in">export</span> JASPERINC=<span class="hljs-variable">$EBROOTJASPER</span>/include 
 
 </code></pre>
 <p>Source the bash script by using:</p>
@@ -189,8 +189,8 @@ module load netCDF-Fortran/4.4.4-intel-2018a
 <span class="hljs-comment">#the result should be: /projects/p_your_project/WRF</span>
 </code></pre>
 <p>It is okay if the commands above produce permission denied error. You can again source the <code>.bashrc_WRF</code> again, just to be sure.</p>
-<h2 id="wrf--wps-installation">WRF &amp; WPS Installation</h2>
-<h3 id="wrf-installation">WRF Installation</h3>
+<h2 id="12-wrf-installation-as-a-module">1.2. WRF Installation as a module</h2>
+<h3 id="121-wrf-installation">1.2.1. WRF Installation</h3>
 <p>After setting up the environment variables and getting the right libraries. You can get the WRF model &amp; and start installing:</p>
 <pre><code class="language-bash">wget https://github.com/wrf-model/WRF/archive/v4.3.1.tar.gz
 tar xvf v4.3.1.tar.gz
@@ -199,11 +199,10 @@ tar xvf v4.3.1.tar.gz
 </code></pre>
 <p>For <code>./configure</code> command, enter 20 (i.e. dmpar with INTEL (ifort/icc): Xeon (SNB with AVX mods)).</p>
 <p>&quot;DMPar&quot; means &quot;Distributed-memory Parallelism,&quot; which means MPI will be used in the build. The resulting binary will run within and across multiple nodes of a distributed-memory system (or cluster). <a href="https://forum.mmm.ucar.edu/threads/what-are-the-differences-between-serial-smpar-and-dmpar-compiles-of-wrf.65/">Ref</a></p>
-<p>Afterwards, choose the type of the nesting you want which in our case is basic nesting, i.e. <code>1</code></p>
-<p>Now you can compile the WRF model using:</p>
+<p>Afterwards, choose the type of the nesting you want which in our case is basic nesting, i.e. <code>1</code>. Now you can compile the WRF model using:</p>
 <pre><code class="language-bash">./compile -j 4 em_real 2&gt;&amp;1 | <span class="hljs-built_in">tee</span> compile.log
 </code></pre>
-<p><code>-j 4</code> means compile the model in parallel. The number refers to the number of the parallel processes. This step can take up to one hour (with the default <code>-j 2</code>).</p>
+<p><code>-j 4</code> means compile the model in parallel. The number refers to the number of the parallel processes. This step can take up to one hour (with the default <code>-j 2</code>). For this syntax <code>2&gt;&amp;1</code> meaning, please refer to <a href="https://stackoverflow.com/a/818284/13818750">here</a> for more information.</p>
 <p>If everything went right, this should be the final output from compilation process:</p>
 <pre><code class="language-bash">---&gt;                  Executables successfully built                  &lt;---
  
@@ -214,38 +213,7 @@ tar xvf v4.3.1.tar.gz
  
 ==========================================================================
 </code></pre>
-<h3 id="wps-installation">WPS Installation</h3>
-<p>First, you need to get WPS from GitHub:</p>
-<pre><code class="language-bash"><span class="hljs-built_in">cd</span> .. 
-wget https://github.com/wrf-model/WPS/archive/v4.2.tar.gz
-tar xvf v4.2.tar.gz
-</code></pre>
-<p>You might want to implement the modification introduced by @KlemensBarfus on his Github repository.
-#<a href="https://github.com/KlemensBarfus/WRF_opt_output_from_ungrib_path">https://github.com/KlemensBarfus/WRF_opt_output_from_ungrib_path</a></p>
-<pre><code class="language-bash">
-</code></pre>
-<p>This is a bash script to get the routines &amp; copy the files to their respective location in WPS directory:</p>
-<pre><code class="language-bash"><span class="hljs-comment"># get routines </span>
-git <span class="hljs-built_in">clone</span> https://github.com/KlemensBarfus/WRF_opt_output_from_ungrib_path.git
-
-<span class="hljs-comment"># copy </span>
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/geogrid_gridinfo_module.F  WPS-4.2/geogrid/src/gridinfo_module.F
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/process_domain_module.F    WPS-4.2/metgrid/src/process_domain_module.F
-
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/metgrid:gridinfo_module.F  WPS-4.2/metgrid/src/gridinfo_module.F 
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/datint.F                   WPS-4.2/ungrib/src/datint.F
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/file_delete.F              WPS-4.2/ungrib/src/file_delete.F
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/read_namelist.F            WPS-4.2/ungrib/src/read_namelist.F 
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/rrpr.F                     WPS-4.2/ungrib/src/rrpr.F
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/output.F                   WPS-4.2/ungrib/src/output.F 
-
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/ungrib.F                   WPS-4.2/util/src/ungrib.F
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/avg_tsfc.F                 WPS-4.2/util/src/avg_tsfc.F 
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/util_gridinfo_module.F     WPS-4.2/util/src/gridinfo_module.F  <span class="hljs-comment"># symlink</span>
-<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/calc_ecmwf_p.F             WPS-4.2/util/src/calc_ecmwf_p.F
-</code></pre>
-<h2 id="creating-modulefile">Creating Modulefile</h2>
-<h3 id="wrf-as-module">WRF as module</h3>
+<h3 id="122-creating-module-file-for-wrf">1.2.2. Creating module file for WRF</h3>
 <p>Create a <code>lua</code> file (i.e. <code>4.3.1-intel-2018a-dmpar.lua</code>) with the version of WRF model and placed it in <code>/projects/p_your_project/WRF/WRF-4.3.1</code>. For more information about lua or lmod files, please check <a href="https://lmod.readthedocs.io/en/latest/015_writing_modules.html">writing Modulefiles</a></p>
 <pre><code class="language-lua">help(<span class="hljs-string">[[
 
@@ -280,7 +248,7 @@ prepend_path( <span class="hljs-string">&quot;PATH&quot;</span>,            path
 prepend_path( <span class="hljs-string">&quot;LD_LIBRARY_PATH&quot;</span>, pathJoin(root, <span class="hljs-string">&quot;main&quot;</span>))
 
 setenv(<span class="hljs-string">&quot;PROJECT_DIR&quot;</span>, <span class="hljs-string">&quot;/projects/p_your_project&quot;</span>)
-setenv(<span class="hljs-string">&quot;WRF_DIR&quot;</span>, <span class="hljs-string">&quot;$PROJECT_DIR/WRF/WRF-4.3.1&quot;</span>)
+setenv(<span class="hljs-string">&quot;WRF_DIR&quot;</span>, <span class="hljs-string">&quot;/projects/p_your_project/WRF/WRF-4.3.1&quot;</span>)
 
 setenv(<span class="hljs-string">&quot;WRFIO_NCD_LARGE_FILE_SUPPORT&quot;</span> , <span class="hljs-number">1</span>)
 setenv(<span class="hljs-string">&quot;NETCDF4&quot;</span>                      , <span class="hljs-number">1</span>)
@@ -294,11 +262,8 @@ setenv(<span class="hljs-string">&quot;JASPERLIB&quot;</span>                   
 setenv(<span class="hljs-string">&quot;JASPERINC&quot;</span>                    , <span class="hljs-string">&quot;/sw/installed/JasPer/2.0.14-GCCcore-6.4.0/include&quot;</span>) 
 
 </code></pre>
-<p>After placing the <code>4.3.1.lua</code> in WRF directory, now you need to you need to expand the module search path. This is done by invoking the command:</p>
-<pre><code class="language-bash">module use /projects/p_your_project/WRF/WRF-4.3.1 
-<span class="hljs-comment"># or </span>
-module use <span class="hljs-variable">$WRF_DIR</span> <span class="hljs-comment"># if you still have it as environment variable.</span>
-
+<p>After placing the <code>4.3.1.lua</code> in WRF-4.3.1 directory, now you need to expand the module search path. This is done by invoking the command:</p>
+<pre><code class="language-bash">module use /projects/p_your_project/WRF/
 </code></pre>
 <p>The command above can fire an error due to the existence of this file <code>hydro/.version</code>. It can be solved by:</p>
 <pre><code class="language-bash"><span class="hljs-comment">#show the file </span>
@@ -308,15 +273,105 @@ module use <span class="hljs-variable">$WRF_DIR</span> <span class="hljs-comment
 <span class="hljs-comment">#then expand the path for the module </span>
 module use <span class="hljs-variable">$WRF_DIR</span> <span class="hljs-comment"># if you still have it as environment variable.</span>
 </code></pre>
-<p>If you are the admin of the project, you will need to make the file accesabile for your project member, therfore use:</p>
-<pre><code class="language-bash"><span class="hljs-built_in">chmod</span> -R 777 /projects/p_your_project/WRF/WRF-4.3.1
+<p>NOW you can search for the WRF module, then load it:</p>
+<pre><code class="language-bash">module -r spider <span class="hljs-string">&#x27;.*WRF.*&#x27;</span>
+
+<span class="hljs-comment"># load the module </span>
+module load WRF-4.3.1/4.3.1-intel-2018a-dmpar
 </code></pre>
-<h3 id="wps-as-module">WPS as module</h3>
-<p><strong>to be continued</strong></p>
-<h2 id="others">Others</h2>
+<p>Now, you have successfully installed WRF as module on an HPC system 🥳.</p>
+<h2 id="13-wps-installation-as-a-module">1.3. WPS Installation as a module</h2>
+<h3 id="131-wps-installation">1.3.1. WPS Installation</h3>
+<p>First, you need to get WPS from GitHub:</p>
+<pre><code class="language-bash"><span class="hljs-built_in">cd</span> .. 
+<span class="hljs-built_in">pwd</span> <span class="hljs-comment"># output should be </span>
+wget https://github.com/wrf-model/WPS/archive/v4.2.tar.gz
+tar xvf v4.2.tar.gz
+</code></pre>
+<p>You might want to implement the modification introduced by @KlemensBarfus on his <a href="https://github.com/KlemensBarfus/WRF_opt_output_from_ungrib_path">Github</a> repository.</p>
+<p>This is a bash script to get the routines &amp; copy the files to their respective location in WPS directory:</p>
+<pre><code class="language-bash"><span class="hljs-comment"># get routines </span>
+git <span class="hljs-built_in">clone</span> https://github.com/KlemensBarfus/WRF_opt_output_from_ungrib_path.git
+
+<span class="hljs-comment"># copy </span>
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/geogrid_gridinfo_module.F  WPS-4.3.1/geogrid/src/gridinfo_module.F
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/process_domain_module.F    WPS-4.3.1/metgrid/src/process_domain_module.F
+
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/metgrid:gridinfo_module.F  WPS-4.3.1/metgrid/src/gridinfo_module.F 
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/datint.F                   WPS-4.3.1/ungrib/src/datint.F
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/file_delete.F              WPS-4.3.1/ungrib/src/file_delete.F
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/read_namelist.F            WPS-4.3.1/ungrib/src/read_namelist.F 
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/rrpr.F                     WPS-4.3.1/ungrib/src/rrpr.F
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/output.F                   WPS-4.3.1/ungrib/src/output.F 
+
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/ungrib.F                   WPS-4.3.1/util/src/ungrib.F
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/avg_tsfc.F                 WPS-4.3.1/util/src/avg_tsfc.F
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/avg_tsfc_ECHAM.F           WPS-4.3.1/util/src/avg_tsfc_ECHAM.F
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/util_gridinfo_module.F     WPS-4.3.1/util/src/gridinfo_module.F  <span class="hljs-comment"># symlink</span>
+<span class="hljs-built_in">cp</span> WRF_opt_output_from_ungrib_path/calc_ecmwf_p.F             WPS-4.3.1/util/src/calc_ecmwf_p.F
+</code></pre>
+<h3 id="122-creating-module-file-for-wps">1.2.2. Creating module file for WPS</h3>
+<pre><code class="language-lua">help(<span class="hljs-string">[[
+
+Description
+===========
+The WRF Pre-Processing System (WPS) is a collection of Fortran and C programs 
+that provides data used as input to the real.exe program. There are three main 
+programs and a number of auxiliary programs that are part of WPS.
+
+More Information
+================
+For detailed instructions, go to:
+   https://www2.mmm.ucar.edu/wrf/users/docs/user_guide_v4/v4.3/contents.html
+
+]]</span>)
+
+whatis(<span class="hljs-string">&quot;Version: 4.3.1&quot;</span>)
+whatis(<span class="hljs-string">[==[Description: The WRF Pre-Processing System (WPS) is a collection of Fortran and C programs 
+that provides data used as input to the real.exe program. There are three main 
+programs and a number of auxiliary programs that are part of WPS.]==]</span>)
+whatis(<span class="hljs-string">[==[Homepage: http://www.wrf-model.org]==]</span>)
+whatis(<span class="hljs-string">&quot;Keywords: Pre-Processing, Climate Modelling, Numerical weather Prediction, Mesoscale Modelling&quot;</span>)
+
+conflict(<span class="hljs-string">&quot;WPS&quot;</span>)
+
+depends_on(<span class="hljs-string">&quot;intel/2018a&quot;</span>)
+depends_on(<span class="hljs-string">&quot;JasPer/2.0.14-GCCcore-6.4.0&quot;</span>)
+depends_on(<span class="hljs-string">&quot;HDF5/1.10.1-intel-2018a&quot;</span>)
+depends_on(<span class="hljs-string">&quot;netCDF/4.6.0-intel-2018a&quot;</span>)
+depends_on(<span class="hljs-string">&quot;PnetCDF/1.9.0-intel-2018a&quot;</span>)
+depends_on(<span class="hljs-string">&quot;netCDF-Fortran/4.4.4-intel-2018a&quot;</span>)
+depends_on(<span class="hljs-string">&quot;ecCodes/2.8.2-intel-2018a&quot;</span>)
+
+<span class="hljs-keyword">local</span> root = <span class="hljs-string">&quot;/projects/p_precipitation_systems/WRF/WPS-4.3.1&quot;</span>
+
+setenv(<span class="hljs-string">&quot;PROJECT_DIR&quot;</span>, <span class="hljs-string">&quot;/projects/p_precipitation_systems&quot;</span>)
+setenv(<span class="hljs-string">&quot;WPS_DIR&quot;</span>, <span class="hljs-string">&quot;/projects/p_precipitation_systems/WRF/WPS-4.3.1&quot;</span>)
+
+setenv(<span class="hljs-string">&quot;WRFIO_NCD_LARGE_FILE_SUPPORT&quot;</span> , <span class="hljs-number">1</span>)
+setenv(<span class="hljs-string">&quot;NETCDF4&quot;</span>                      , <span class="hljs-number">1</span>)
+setenv(<span class="hljs-string">&quot;OMP_STACKSIZE&quot;</span>                , <span class="hljs-string">&quot;2G&quot;</span>)
+setenv(<span class="hljs-string">&quot;HDF5&quot;</span>                         , <span class="hljs-string">&quot;/sw/installed/HDF5/1.10.1-intel-2018a&quot;</span>)
+setenv(<span class="hljs-string">&quot;PHDF5&quot;</span>                        , <span class="hljs-string">&quot;/sw/installed/HDF5/1.10.1-intel-2018a&quot;</span>)
+setenv(<span class="hljs-string">&quot;PNETCDF&quot;</span>                      , <span class="hljs-string">&quot;/sw/installed/PnetCDF/1.9.0-intel-2018a&quot;</span>)
+setenv(<span class="hljs-string">&quot;NETCDF&quot;</span>                       , <span class="hljs-string">&quot;/projects/p_precipitation_systems/WRF/netcdf_mine&quot;</span>)
+setenv(<span class="hljs-string">&quot;NETCDFF&quot;</span>                      , <span class="hljs-string">&quot;/sw/installed/netCDF-Fortran/4.4.4-intel-2018a&quot;</span>)
+setenv(<span class="hljs-string">&quot;JASPERLIB&quot;</span>                    , <span class="hljs-string">&quot;/sw/installed/JasPer/2.0.14-GCCcore-6.4.0/lib64&quot;</span>)  
+setenv(<span class="hljs-string">&quot;JASPERINC&quot;</span>                    , <span class="hljs-string">&quot;/sw/installed/JasPer/2.0.14-GCCcore-6.4.0/include&quot;</span>) 
+</code></pre>
+<h2 id="15-others">1.5. Others</h2>
+<ul>
+<li>
 <p>If you would like to remove some unnecessary paths in <code>PATH</code> variable after installation, you can use:</p>
 <pre><code class="language-bash">PATH=$(REMOVE_PART=<span class="hljs-string">&quot;Path/to/be/removed&quot;</span> sh -c <span class="hljs-string">&#x27;echo &quot;:$PATH:&quot; | sed &quot;s@:$REMOVE_PART:@:@g;s@^:\(.*\):\$@\1@&quot;&#x27;</span>)
 </code></pre>
+</li>
+<li>
+<p>If you are the admin of the project, you will need to make the file accessible for your project member, therefore use:</p>
+<pre><code class="language-bash"><span class="hljs-built_in">chmod</span> -R 777 /projects/p_your_project/WRF/WRF-4.3.1
+</code></pre>
+</li>
+</ul>
 
         <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
         
